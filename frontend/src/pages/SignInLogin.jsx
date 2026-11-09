@@ -35,7 +35,7 @@ export default function Auth() {
       if (!response.ok) {
         setPesanError(data.error);
       } else {
-        // Jika sukses, lempar pengguna ke halaman utama (Jelajah)
+        localStorage.setItem("user", JSON.stringify(data.user));
         navigate('/');
       }
     } catch (err) {

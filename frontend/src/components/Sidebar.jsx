@@ -1,6 +1,6 @@
-import React, { useState, useEffect } from 'react';
-import { Link, useLocation } from 'react-router-dom';
-import { Compass, Users, QrCode, Clock, User } from 'lucide-react';
+import React, { useState, useEffect} from 'react';
+import { Link, useLocation, useNavigate } from 'react-router-dom';
+import { Compass, Users, QrCode, Clock, User, LogOut } from 'lucide-react';
 
 export default function Sidebar() {
   const location = useLocation();
@@ -13,7 +13,7 @@ export default function Sidebar() {
     const dataSimpanan = localStorage.getItem('user');
     if (dataSimpanan) {
       try {
-        setUserData(JSON.parse(dataSimpanan));
+        const parsed = JSON.parse(dataSimpanan);
         if (parsed && (parsed.name || parsed.nama)){
           setUserData(parsed);
         }
@@ -86,7 +86,7 @@ export default function Sidebar() {
             <p className="text-[10px] text-gray-400 truncate">Akun mahasiswa</p>
           </div>
           <button onClick={handleLogout} title="Keluar / Logout" className="p-1.5 text-gray-400 hover:text-red-600 hover:bg-red-50 rounded-lg transition">
-          <Logout className="w-4 h-4"/>
+          <LogOut className="w-4 h-4"/>
           </button>
         </div>
       </div>

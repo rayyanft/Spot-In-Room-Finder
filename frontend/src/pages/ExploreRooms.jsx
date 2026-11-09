@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Search, MapPin, Users, Wifi, Wind } from 'lucide-react';
+import { Link } from 'react-router-dom';
 
 export default function ExploreRooms() {
   const [rooms, setRooms] = useState([]);
@@ -29,9 +30,6 @@ export default function ExploreRooms() {
             <h1 className="text-2xl md:text-3xl font-bold text-gray-900">Spot-In</h1>
             <p className="text-sm md:text-base text-gray-500">Temukan Tempat Terbaikmu</p>
           </div>
-          <div className="w-10 h-10 md:w-12 md:h-12 bg-gray-200 rounded-full border-2 border-green-500 overflow-hidden cursor-pointer hover:opacity-80 transition">
-            <img src="https://api.dicebear.com/7.x/avataaars/svg?seed=Felix" alt="Profile" />
-          </div>
         </div>
 
         <div className="relative mb-8 max-w-2xl">
@@ -58,7 +56,7 @@ export default function ExploreRooms() {
               <div key={room.id} className="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden hover:shadow-md transition duration-300 flex flex-col">
                 <div className="flex p-4 gap-4 border-b border-gray-50">
                   <div className="w-24 h-24 bg-gray-200 rounded-xl overflow-hidden shrink-0">
-                     <img src="https://images.unsplash.com/photo-1497366216548-37526070297c?auto=format&fit=crop&q=80&w=300" alt="Room" className="w-full h-full object-cover" />
+                     <img src={room.image_url || '/assets/default-placeholder.jpg'} alt={room.room_name} className="w-full h-full object-cover" />
                   </div>
                   <div className="flex flex-col justify-center">
                     <div className="flex items-center gap-1 text-xs text-blue-600 bg-blue-50 w-fit px-2.5 py-1 rounded-full mb-2 font-medium">
@@ -82,9 +80,12 @@ export default function ExploreRooms() {
                        <span className="flex items-center gap-1 text-[10px] md:text-xs text-gray-600 bg-white border border-gray-200 px-2 py-1.5 rounded-md"><Wind className="w-3 h-3 md:w-3.5 md:h-3.5"/> Ber-AC</span>
                     </div>
                   </div>
-                  <button className="w-full py-2.5 bg-white border border-blue-200 text-blue-600 rounded-xl text-sm font-semibold hover:bg-blue-50 hover:border-blue-300 transition">
+                  <Link 
+                  to={`/room/${room.id}`} 
+                  className="w-full py-2.5 bg-white border border-blue-200 text-blue-600 rounded-xl text-sm font-semibold hover:bg-blue-50 hover:border-blue-300 transition flex justify-center"
+                  >
                     Lihat Ruang
-                  </button>
+                    </Link>
                 </div>
               </div>
             ))}

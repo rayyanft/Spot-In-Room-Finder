@@ -1,10 +1,32 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { Link, useLocation } from 'react-router-dom';
-import { Compass, Users, QrCode, Clock, User, HelpCircle } from 'lucide-react';
+import { Compass, Users, QrCode, Clock, User } from 'lucide-react';
 
 export default function Sidebar() {
   const location = useLocation();
+  const navigate = useNavigate();
   const pathSaatIni = location.pathname;
+
+  const [userData, setUserData] = useState({ name: 'Mahasiswa' });
+
+  useEffect(() => {
+    const dataSimpanan = localStorage.getItem('user');
+    if (dataSimpanan) {
+      try {
+        setUserData(JSON.parse(dataSimpanan));
+        if (parsed && (parsed.name || parsed.nama)){
+          setUserData(parsed);
+        }
+      } catch(e){
+        console.error("Gagal membaca data user", e);
+      }
+    }
+  }, []);
+
+  const handleLogout = () => {
+    localStorage.removeItem("user");
+    navigate("/login");
+  }
 
   const menuItems = [
     { nama: 'Jelajah ruang', rute: '/', ikon: Compass },
@@ -13,6 +35,8 @@ export default function Sidebar() {
     { nama: 'Sesi belajar', rute: '/sesi', ikon: Clock },
     { nama: 'Profil akun', rute: '/profil', ikon: User },
   ];
+
+  const namaTampil = userData.name || userData.nama || "Mahasiswa";
 
   return (
     <aside className="hidden md:flex flex-col w-64 bg-white border-r border-gray-100 min-h-screen p-6 fixed left-0 top-0 bottom-0 justify-between z-40">
@@ -25,15 +49,8 @@ export default function Sidebar() {
           <span className="text-xl font-bold text-gray-900 tracking-tight">Spot-In</span>
         </div>
 
-        {/* Card Info Workspace */}
-        <div className="bg-gray-50/80 p-3 rounded-xl mb-6 border border-gray-100">
-          <p className="text-[10px] uppercase tracking-wider font-bold text-gray-400 mb-1">Workspace Kampus</p>
-          <p className="text-xs font-bold text-gray-800">Kampus Terpadu</p>
-          <p className="text-[11px] text-gray-500">Gedung A & B</p>
-        </div>
-
         {/* List Menu Navigasi */}
-        <nav className="space-y-1.5">
+        <nav className="space-y-1.5 mt-4">
           {menuItems.map((item) => {
             const Ikon = item.ikon;
             const apakahAktif = pathSaatIni === item.rute;
@@ -56,29 +73,21 @@ export default function Sidebar() {
       </div>
 
       {/* Bagian Bawah Sidebar */}
-      <div className="space-y-4">
-        <div className="bg-blue-50/60 p-3.5 rounded-2xl border border-blue-100">
-          <div className="flex items-center gap-2 text-blue-600 mb-1">
-            <HelpCircle className="w-4 h-4" />
-            <span className="text-xs font-bold">Butuh bantuan?</span>
-          </div>
-          <p className="text-[11px] text-gray-500 mb-2">Panduan ruang & check-in kampus.</p>
-          <a href="#" className="text-[11px] font-bold text-blue-600 hover:underline">
-            Buka pusat bantuan &rarr;
-          </a>
-        </div>
-
+      <div className="space-y-3 pt-4 border-t border-gray-100">
         {/* User Card */}
         <div className="flex items-center gap-3 pt-2 border-t border-gray-100">
           <img
-            src="https://api.dicebear.com/7.x/avataaars/svg?seed=Felix"
+            src={`https://api.dicebear.com/7.x/avataaars/svg?seed=${userData.name}`}
             alt="Avatar"
             className="w-8 h-8 rounded-full bg-gray-100"
           />
           <div className="overflow-hidden">
-            <p className="text-xs font-bold text-gray-800 truncate">Anindya Putri</p>
+            <p className="text-xs font-bold text-gray-800 truncate">{namaTampil}</p>
             <p className="text-[10px] text-gray-400 truncate">Akun mahasiswa</p>
           </div>
+          <button onClick={handleLogout} title="Keluar / Logout" className="p-1.5 text-gray-400 hover:text-red-600 hover:bg-red-50 rounded-lg transition">
+          <Logout className="w-4 h-4"/>
+          </button>
         </div>
       </div>
     </aside>
